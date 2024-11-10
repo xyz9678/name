@@ -1,0 +1,1778 @@
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+local Window = OrionLib:MakeWindow({Name = "DemoMode V2", HidePremium = false, IntroText = "Welcome To Demomode", SaveConfig = true, ConfigFolder = "OrionTest"})
+
+--Tabs
+local InfoTab = Window:MakeTab({
+  Name = "Info",
+  Icon = "rbxassetid://4483345998",
+  PremiumOnly = false
+})
+
+local MainTab = Window:MakeTab({
+  Name = "Main",
+  Icon = "rbxassetid://4483345998",
+  PremiumOnly = false
+})
+
+local TargetTab = Window:MakeTab({
+  Name = "Target",
+  Icon = "rbxassetid://4483345998",
+  PremiumOnly = false
+})
+
+local CombatTab = Window:MakeTab({
+  Name = "Combat",
+  Icon = "rbxassetid://4483345998",
+  PremiumOnly = false
+})
+
+local CamlocksTab = Window:MakeTab({
+  Name = "Camlocks",
+  Icon = "rbxassetid://4483345998",
+  PremiumOnly = false
+})
+
+local OrbitTab = Window:MakeTab({
+  Name = "Orbit",
+  Icon = "rbxassetid://4483345998",
+  PremiumOnly = false
+})
+
+local TeleportsTab = Window:MakeTab({
+  Name = "Teleports",
+  Icon = "rbxassetid://4483345998",
+  PremiumOnly = false
+})
+
+local AutoFarmTab = Window:MakeTab({
+  Name = "Auto-Farm",
+  Icon = "rbxassetid://4483345998",
+  PremiumOnly = false
+})
+
+local OtherTab = Window:MakeTab({
+  Name = "Others",
+  Icon = "rbxassetid://4483345998",
+  PremiumOnly = false
+})
+
+--Info Tab
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+if player and player.Name then
+    local username = player.Name
+
+    local function updateLabel()
+        InfoTab:AddLabel("Username: " .. username)
+    end
+
+    updateLabel()
+else
+    warn("Player or username not found")
+end
+
+local Players = game:GetService("Players")
+local MarketplaceService = game:GetService("MarketplaceService")
+
+local placeId = game.PlaceId
+local gameName = MarketplaceService:GetProductInfo(placeId).Name
+
+local function updateLabel()
+    InfoTab:AddLabel("Game: " .. gameName .. " (ID: " .. placeId .. ")")
+end
+
+updateLabel()
+
+local Players = game:GetService("Players")
+local MarketplaceService = game:GetService("MarketplaceService")
+
+local placeId = game.PlaceId
+local supportedGameId = 2788229376
+local supportedGameName = "Da Hood"
+
+local function getGameName(id)
+    local success, result = pcall(function()
+        return MarketplaceService:GetProductInfo(id).Name
+    end)
+    if success then
+        return result
+    else
+        return nil
+    end
+end
+
+local gameName = getGameName(placeId)
+
+local function updateLabel()
+    if placeId == supportedGameId or gameName == supportedGameName then
+        InfoTab:AddLabel("Game: Supported")
+    else
+        InfoTab:AddLabel("Game: Unsupported")
+    end
+end
+
+updateLabel()
+
+InfoTab:AddParagraph(
+    "New Updates For V2",
+    "Added Free Cash (Redeem Codes, Located In Combat Tab\n" ..
+    "Added Cash Aura (Auto Collects Cash, Located In Combat Tab\n" ..
+    "Added Auto-Drop (Located In Combat Tab\n" ..
+    "Added TP Tool (Located In Combat\n" .. "ALL LOCATED IN COMBAT\n")
+
+--Main Tab
+local Section = MainTab:AddSection({
+    Name = "Main Stuff"
+})
+
+MainTab:AddButton({
+    Name = "Fullbright",
+    Callback = function()
+            local Light = game:GetService("Lighting")
+            function dofullbright()
+                        Light.Ambient = Color3.new(1, 1, 1)
+                        Light.ColorShift_Bottom = Color3.new(1, 1, 1)
+                        Light.ColorShift_Top = Color3.new(1, 1, 1)
+                        game.Lighting.FogEnd = 100000
+                        game.Lighting.FogStart = 0
+                        game.Lighting.ClockTime = 14
+                        game.Lighting.Brightness = 2
+                        game.Lighting.GlobalShadows = false
+                    end
+            dofullbright(value)
+            print("button pressed")
+    end    
+})
+
+MainTab:AddButton({
+    Name = "Force Reset",
+    Callback = function()
+            local localPlayer = game:GetService('Players').LocalPlayer;
+            local localCharacter = localPlayer.Character;
+            localCharacter:FindFirstChildOfClass('Humanoid').Health = 0;
+            local newCharacter = localPlayer.CharacterAdded:Wait();
+            local spoofFolder = Instance.new('Folder');
+            spoofFolder.Name = 'FULLY_LOADED_CHAR';
+            spoofFolder.Parent = newCharacter;
+            newCharacter:WaitForChild('RagdollConstraints'):Destroy();
+            local spoofValue = Instance.new('BoolValue', newCharacter);
+            spoofValue.Name = 'RagdollConstraints';
+            local name = game.Players.LocalPlayer.Name
+            local lol =    game.Workspace:WaitForChild(name)
+            local money = Instance.new("Folder",game.Players.LocalPlayer.Character);money.Name = "FULLY_LOADED_CHAR"
+            lol.Parent = game.Workspace.Players
+            game.Players.LocalPlayer.Character:WaitForChild("BodyEffects")
+            game.Players.LocalPlayer.Character.BodyEffects.BreakingParts:Destroy()
+            print("button pressed")
+    end    
+})
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local noclipEnabled = false
+
+local function setNoclip(character, enable)
+    if not character then return end
+
+    for _, part in ipairs(character:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.CanCollide = not enable
+        end
+    end
+end
+
+local function onCharacterAdded(character)
+    RunService.RenderStepped:Connect(function()
+        if noclipEnabled then
+            setNoclip(character, true)
+        else
+            setNoclip(character, false)
+        end
+    end)
+end
+
+local player = Players.LocalPlayer
+if player and player.Character then
+    onCharacterAdded(player.Character)
+end
+
+player.CharacterAdded:Connect(onCharacterAdded)
+
+MainTab:AddToggle({
+    Name = "Noclip",
+    Default = false,
+    Callback = function(value)
+        noclipEnabled = value
+    end
+})
+
+MainTab:AddButton({
+    Name = "Fly",
+    Callback = function()          loadstring(game:HttpGet("https://raw.githubusercontent.com/scripthubekitten/dahoodios/main/hoodcustomfly", true))()
+            print("button pressed")
+    end    
+    })
+
+MainTab:AddButton({
+    Name = "Anti-Afk",
+    Callback = function()
+            wait(0.5)local ba=Instance.new("ScreenGui")
+            local ca=Instance.new("TextLabel")local da=Instance.new("Frame")
+            local _b=Instance.new("TextLabel")local ab=Instance.new("TextLabel")ba.Parent=game.CoreGui
+            ba.ZIndexBehavior=Enum.ZIndexBehavior.Sibling;ca.Parent=ba;ca.Active=true
+            ca.BackgroundColor3=Color3.new(0.176471,0.176471,0.176471)ca.Draggable=true
+            ca.Position=UDim2.new(0.698610067,0,0.098096624,0)ca.Size=UDim2.new(0,304,0,52)
+            ca.Font=Enum.Font.SourceSansSemibold;ca.Text="Smacking big pussy with tits"ca.TextColor3=Color3.new(0,1,1)
+            ca.TextSize=22;da.Parent=ca
+            da.BackgroundColor3=Color3.new(0.196078,0.196078,0.196078)da.Position=UDim2.new(0,0,1.0192306,0)
+            da.Size=UDim2.new(0,304,0,107)_b.Parent=da
+            _b.BackgroundColor3=Color3.new(0.176471,0.176471,0.176471)_b.Position=UDim2.new(0,0,0.800455689,0)
+            _b.Size=UDim2.new(0,304,0,21)_b.Font=Enum.Font.Arial;_b.Text="Demomode Anti-Afk"
+            _b.TextColor3=Color3.new(1,1,1)_b.TextSize=20;ab.Parent=da
+            ab.BackgroundColor3=Color3.new(0.176471,0.176471,0.176471)ab.Position=UDim2.new(0,0,0.158377379,0)
+            ab.Size=UDim2.new(0,304,0,44)ab.Font=Enum.Font.ArialBold;ab.Text="Status: Script Started"
+            ab.TextColor3=Color3.new(1,1,1)ab.TextSize=20;local bb=game:service'VirtualUser'
+            game:service'Players'.LocalPlayer.Idled:connect(function()
+            bb:CaptureController()bb:ClickButton2(Vector2.new())
+            ab.Text="You went idle and ROBLOX tried to kick you but we reflected it!"wait(2)ab.Text="Script Re-Enabled"end)
+            print("button pressed")
+    end    
+})
+
+MainTab:AddButton({
+    Name = "Anti-Fling",
+    Callback = function()
+            local localPlayer = game:GetService('Players').LocalPlayer;
+            local localCharacter = localPlayer.Character;
+            localCharacter:FindFirstChildOfClass('Humanoid').Health = 0;
+            local newCharacter = localPlayer.CharacterAdded:Wait();
+            local spoofFolder = Instance.new('Folder');
+            spoofFolder.Name = 'FULLY_LOADED_CHAR';
+            spoofFolder.Parent = newCharacter;
+            newCharacter:WaitForChild('RagdollConstraints'):Destroy();
+            local spoofValue = Instance.new('BoolValue', newCharacter);
+            spoofValue.Name = 'RagdollConstraints';
+            local name = game.Players.LocalPlayer.Name
+            local lol =    game.Workspace:WaitForChild(name)
+            local money = Instance.new("Folder",game.Players.LocalPlayer.Character);money.Name = "FULLY_LOADED_CHAR"
+            lol.Parent = game.Workspace.Players
+            game.Players.LocalPlayer.Character:WaitForChild("BodyEffects")
+            game.Players.LocalPlayer.Character.BodyEffects.BreakingParts:Destroy()
+            print("button pressed")
+    end    
+})
+
+MainTab:AddButton({
+    Name = "Auto Report (NEW)",
+    Callback = function()
+            -- Services
+            local Players = game:GetService("Players")
+            local ReplicatedStorage = game:GetService("ReplicatedStorage")
+            local MainEvent = ReplicatedStorage:WaitForChild("MainEvent")
+            local StarterGui = game:GetService("StarterGui")
+            local HttpService = game:GetService("HttpService")
+            local TeleportService = game:GetService("TeleportService")
+            local currentServerId = game.JobId
+            local placeId = 2788229376
+
+            -- Create GUI
+            local screenGui = Instance.new("ScreenGui")
+            screenGui.ResetOnSpawn = false
+            local mainFrame = Instance.new("Frame")
+            local titleLabel = Instance.new("TextLabel")
+            local autoReportButton = Instance.new("TextButton")
+            local serverhopButton = Instance.new("TextButton")
+            local madeByLabel = Instance.new("TextLabel")
+
+            screenGui.Parent = game.CoreGui
+            mainFrame.Parent = screenGui
+            mainFrame.BackgroundColor3 = Color3.new(0, 0, 0)
+            mainFrame.Position = UDim2.new(0.25, 0, 0.25, 0)
+            mainFrame.Size = UDim2.new(0, 300, 0, 200)
+            mainFrame.Active = true
+            mainFrame.Draggable = true
+
+            titleLabel.Parent = mainFrame
+            titleLabel.Text = "Demomode Auto Report"
+            titleLabel.Font = Enum.Font.LuckiestGuy
+            titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+            titleLabel.TextStrokeTransparency = 0
+            titleLabel.TextStrokeColor3 = Color3.new(1, 1, 1)
+            titleLabel.Size = UDim2.new(1, 0, 0, 50)
+            titleLabel.Position = UDim2.new(0, 0, 0, 0)
+
+            autoReportButton.Parent = mainFrame
+            autoReportButton.Text = "Auto Report"
+            autoReportButton.Font = Enum.Font.LuckiestGuy
+            autoReportButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+            autoReportButton.BackgroundColor3 = Color3.new(0.5, 0.5, 0.5)
+            autoReportButton.TextStrokeTransparency = 0
+            autoReportButton.TextStrokeColor3 = Color3.new(1, 1, 1)
+            autoReportButton.Size = UDim2.new(1, 0, 0, 50)
+            autoReportButton.Position = UDim2.new(0, 0, 0, 50)
+
+            serverhopButton.Parent = mainFrame
+            serverhopButton.Text = "Serverhop"
+            serverhopButton.Font = Enum.Font.LuckiestGuy
+            serverhopButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+            serverhopButton.BackgroundColor3 = Color3.new(0.5, 0.5, 0.5)
+            serverhopButton.TextStrokeTransparency = 0
+            serverhopButton.TextStrokeColor3 = Color3.new(1, 1, 1)
+            serverhopButton.Size = UDim2.new(1, 0, 0, 50)
+            serverhopButton.Position = UDim2.new(0, 0, 0, 110)
+
+            madeByLabel.Parent = mainFrame
+            madeByLabel.Text = "This was made by calgl#0001"
+            madeByLabel.Font = Enum.Font.LuckiestGuy
+            madeByLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+            madeByLabel.TextStrokeTransparency = 0
+            madeByLabel.TextStrokeColor3 = Color3.new(1, 1, 1)
+            madeByLabel.Size = UDim2.new(1, 0, 0, 50)
+            madeByLabel.Position = UDim2.new(0, 0, 0, 170)
+            madeByLabel.Active = true
+            madeByLabel.Draggable = true
+
+            local function applyRainbowEffect(textLabel)
+                while true do
+                    for i = 0, 1, 0.01 do
+                        textLabel.TextColor3 = Color3.fromHSV(i, 1, 1)
+                        wait(0.05)
+                    end
+                end
+            end
+
+            spawn(function() applyRainbowEffect(titleLabel) end)
+            spawn(function() applyRainbowEffect(autoReportButton) end)
+            spawn(function() applyRainbowEffect(serverhopButton) end)
+            spawn(function() applyRainbowEffect(madeByLabel) end)
+
+            local function createNotification(title, text)
+                StarterGui:SetCore("SendNotification", {
+                    Title = title,
+                    Text = text,
+                    Duration = 5
+                })
+            end
+
+            local function reportPlayer(player)
+                local args = {
+                    [1] = "REPORT_PLAYER",
+                    [2] = player,
+                    [3] = "Exploiting"
+                }
+
+                for _ = 1, 2 do
+                    MainEvent:FireServer(unpack(args))
+                    wait(1)
+                end
+
+                createNotification("Reported", "Reported: " .. player.Name)
+            end
+
+            local function reportAllPlayers()
+                local players = Players:GetPlayers()
+
+                for _, player in ipairs(players) do
+                    if player ~= Players.LocalPlayer then
+                        reportPlayer(player)
+                        wait(2)
+                    end
+                end
+
+                createNotification("Finished", "All players have been reported.")
+            end
+
+            local function sendNotification(title, text, duration)
+                StarterGui:SetCore("SendNotification", {
+                    Title = title;
+                    Text = text;
+                    Duration = duration;
+                })
+            end
+
+            local function getServers(cursor)
+                local url = "https://games.roblox.com/v1/games/" .. placeId .. "/servers/Public?sortOrder=Asc&limit=100"
+                if cursor then
+                    url = url .. "&cursor=" .. cursor
+                end
+                local response = HttpService:JSONDecode(game:HttpGet(url))
+                return response
+            end
+
+            local function serverHop()
+                sendNotification("Serverhopping...", "Searching for a new server.", 5)
+                local servers = getServers()
+                local foundServer = false
+
+                while not foundServer do
+                    for _, server in pairs(servers.data) do
+                        if server.id ~= currentServerId and server.playing < server.maxPlayers then
+                            TeleportService:TeleportToPlaceInstance(placeId, server.id)
+                            foundServer = true
+                            break
+                        end
+                    end
+
+                    if servers.nextPageCursor and not foundServer then
+                        servers = getServers(servers.nextPageCursor)
+                    else
+                        break
+                    end
+                end
+
+                if not foundServer then
+                    sendNotification("Server Not Found", "Retrying in 10 seconds.", 5)
+                    wait(10)
+                    serverHop()
+                end
+            end
+
+            autoReportButton.MouseButton1Click:Connect(function()
+                reportAllPlayers()
+            end)
+
+            serverhopButton.MouseButton1Click:Connect(function()
+                serverHop()
+            end)
+            print("button pressed")
+    end    
+})
+
+MainTab:AddButton({
+    Name = "Low GFX",
+    Callback = function()
+            for _,v in pairs(workspace:GetDescendants()) do
+            if v.ClassName == "Part"
+            or v.ClassName == "SpawnLocation"
+            or v.ClassName == "WedgePart"
+            or v.ClassName == "Terrain"
+            or v.ClassName == "MeshPart" then
+            v.Material = "Plastic"
+            end
+            end
+            print("button pressed")
+    end    
+})
+
+local Section = MainTab:AddSection({
+    Name = "Other Scripts"
+})
+
+MainTab:AddButton({
+    Name = "Keyboard Script",
+    Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/advxzivhsjjdhxhsidifvsh/mobkeyboard/main/main.txt", true))()
+            print("button pressed")
+    end    
+})
+
+--Target Tab
+local Section = TargetTab:AddSection({
+    Name = "Target"
+    })
+
+local Players = game:GetService("Players")
+local CurrentPlayer
+
+local function getAllPlayers()
+    local playerList = {}
+    for _, player in ipairs(Players:GetPlayers()) do
+        table.insert(playerList, player.Name)
+        table.insert(playerList, player.DisplayName)
+    end
+    return playerList
+end
+
+local function teleportToPlayer(player)
+    if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        local humanoidRootPart = Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        if humanoidRootPart then
+            humanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame
+        end
+    end
+end
+
+local function viewPlayer(player)
+    local camera = workspace.CurrentCamera
+    camera.CameraSubject = player.Character
+    camera.CameraType = Enum.CameraType.Follow
+end
+
+local function resetCamera()
+    local camera = workspace.CurrentCamera
+    camera.CameraSubject = Players.LocalPlayer.Character
+    camera.CameraType = Enum.CameraType.Custom
+end
+
+TargetTab:AddTextbox({
+    Name = "Player Here",
+    Default = "",
+    TextDisappear = true,
+    Callback = function(Value)
+        local allPlayers = Players:GetPlayers()
+        for _, player in ipairs(allPlayers) do
+            if string.find(string.lower(player.Name), string.lower(Value)) or string.find(string.lower(player.DisplayName), string.lower(Value)) then
+                CurrentPlayer = player
+                print("Player found: " .. player.Name)
+                break
+            end
+        end
+    end
+})
+
+TargetTab:AddToggle({
+    Name = "View",
+    Default = false,
+    Callback = function(Value)
+        if Value and CurrentPlayer then
+            viewPlayer(CurrentPlayer)
+            print("Now viewing: " .. CurrentPlayer.Name)
+        else
+            resetCamera()
+            print("Camera reset to local player.")
+        end
+    end    
+})
+
+TargetTab:AddButton({
+    Name = "Goto",
+    Callback = function()
+        if CurrentPlayer then
+            teleportToPlayer(CurrentPlayer)
+            print("Teleported to: " .. CurrentPlayer.Name)
+        else
+            print("No player selected to teleport to.")
+        end
+    end    
+})
+
+--Combat Tab
+local Section = CombatTab:AddSection({
+    Name = "Combat"
+})
+
+local player = game.Players.LocalPlayer or game.Players:GetPlayerFromCharacter(script.Parent)
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local deepVoidPosition = Vector3.new(0, -10000, 0)
+local toggleEnabled = false
+
+local function forceReset()
+    humanoid.Health = 0
+end
+
+local function teleportToDeepVoid()
+    local rootPart = character:WaitForChild("HumanoidRootPart")
+    rootPart.CFrame = CFrame.new(deepVoidPosition)
+    forceReset()
+end
+
+local function isHealthBarRedOrOrange(health)
+    local maxHealth = humanoid.MaxHealth
+    local healthPercentage = health / maxHealth
+
+    if healthPercentage <= 0.1 then
+        return true
+    elseif healthPercentage <= 0.2 then
+        return true
+    else
+        return false
+    end
+end
+
+local healthCheckConnection
+local function enableHealthCheck()
+    healthCheckConnection = humanoid.HealthChanged:Connect(function(health)
+        if toggleEnabled and (health < 5 or isHealthBarRedOrOrange(health)) then
+            teleportToDeepVoid()
+        end
+    end)
+end
+
+local function disableHealthCheck()
+    if healthCheckConnection then
+        healthCheckConnection:Disconnect()
+    end
+end
+
+CombatTab:AddToggle({
+    Name = "Anti-Stomp (Buggy)",
+    Default = false,
+    Callback = function(Value)
+        toggleEnabled = Value
+        if toggleEnabled then
+            enableHealthCheck()
+        else
+            disableHealthCheck()
+        end
+    end    
+})
+
+CombatTab:AddToggle({
+    Name = "Auto Reload",
+    Default = false,
+    Callback = function(Value)
+        _G.AutoReload = Value
+
+        if _G.AutoReload then
+            while _G.AutoReload and game:GetService("RunService").Heartbeat:Wait() do
+                if game:GetService("Players").LocalPlayer.Character:FindFirstChildWhichIsA("Tool") then
+                    local tool = game:GetService("Players").LocalPlayer.Character:FindFirstChildWhichIsA("Tool")
+                    local ammo = tool:FindFirstChild("Ammo")
+
+                    if ammo and ammo.Value <= 0 then
+                        game:GetService("ReplicatedStorage").MainEvent:FireServer("Reload", tool) 
+                        wait(1)
+                    end
+                end
+            end
+        end
+    end    
+})
+
+CombatTab:AddButton({
+    Name = "Control Player (Grab)",
+    Callback = function()            loadstring(game:HttpGet('https://raw.githubusercontent.com/yuvic123/s/main/s'))()
+            print("button pressed")
+    end    
+})
+
+CombatTab:AddButton({
+    Name = "Free Cash",
+    Callback = function()
+            local ReplicatedStorage = game:GetService("ReplicatedStorage")
+            local MainEvent = ReplicatedStorage:WaitForChild("MainEvent")
+
+            local promoCodes = {
+                "RUBY",
+                "DAUP",
+                "TRADEME!",
+                "PENGUIN",
+                "pumpkins2023",
+                "BLAZE"
+            }
+
+            local function redeemPromoCode(code)
+                local args = {
+                    [1] = "EnterPromoCode",
+                    [2] = code
+                }
+
+                MainEvent:FireServer(unpack(args))
+
+                game:GetService("StarterGui"):SetCore("SendNotification", {
+                    Title = "Demo’s Free Cash Redeemed!",
+                    Text = "Promo Code: " .. code,
+                    Duration = 5
+                })
+            end
+
+            for _, code in ipairs(promoCodes) do
+                redeemPromoCode(code)
+                wait(1)
+            end
+            print("button pressed")
+    end    
+})
+
+CombatTab:AddButton({
+    Name = "Anti-Lock",
+    Callback = function()            loadstring(game:HttpGet('https://raw.githubusercontent.com/wenny69420/KirbswareScripts/main/MobileV3'))()
+            print("button pressed")
+    end    
+})
+
+local isEnabled = false
+
+local function toggleAction(value)
+    isEnabled = value
+end
+
+CombatTab:AddToggle({
+    Name = "Auto-Stomp",
+    Default = false,
+    Callback = function(value)
+        toggleAction(value)
+        print("Toggle value:", value)
+    end    
+})
+
+CombatTab:AddButton({
+    Name = "TP Tool",
+    Callback = function()
+            mouse = game.Players.LocalPlayer:GetMouse()
+            tool = Instance.new("Tool")
+            tool.RequiresHandle = false
+            tool.Name = "Demo’s TP Tool"
+            tool.Activated:connect(function()
+            local pos = mouse.Hit+Vector3.new(0,2.5,0)
+            pos = CFrame.new(pos.X,pos.Y,pos.Z)
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = pos
+            end)
+            tool.Parent = game.Players.LocalPlayer.Backpack
+            print("button pressed")
+    end    
+})
+
+spawn(function()
+    while true do
+        if isEnabled then
+            local args = {
+                [1] = "Stomp"
+            }
+            game:GetService("ReplicatedStorage").MainEvent:FireServer(unpack(args))
+        end
+        wait(0.01)
+    end
+end)
+
+CombatTab:AddButton({
+    Name = "Speed Tool",
+    Callback = function()            loadstring(game:HttpGet("https://raw.githubusercontent.com/scripthubekitten/backupspeedtool/main/backupspeedtool", true))()
+            print("button pressed")
+    end    
+})
+
+CombatTab:AddButton({
+    Name = "CFrame Speed",
+    Callback = function()
+            local speed = 100  -- Speed value
+            local isMoving = true
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+            local hrp = character:WaitForChild("HumanoidRootPart")
+
+            -- Create the GUI
+            local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+            local toggleButton = Instance.new("TextButton", screenGui)
+
+            toggleButton.Size = UDim2.new(0, 100, 0, 50)
+            toggleButton.Position = UDim2.new(1, -110, 0, 10)  -- Top right of the screen
+            toggleButton.Text = "Stop"
+            toggleButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)  -- Red color for stop
+            toggleButton.TextScaled = true
+
+            -- Function to toggle movement
+            local function toggleMovement()
+                isMoving = not isMoving
+                if isMoving then
+                    toggleButton.Text = "Stop"
+                    toggleButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)  -- Red for stop
+                else
+                    toggleButton.Text = "Go"
+                    toggleButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)  -- Green for go
+                end
+            end
+
+            -- Connect the button click to toggle the movement
+            toggleButton.MouseButton1Click:Connect(toggleMovement)
+
+            -- Run the movement loop
+            game:GetService("RunService").RenderStepped:Connect(function(deltaTime)
+                if isMoving then
+                    local moveDirection = hrp.CFrame.LookVector
+                    hrp.CFrame = hrp.CFrame + moveDirection * speed * deltaTime
+                end
+            end)
+            print("button pressed")
+    end    
+})
+
+CombatTab:AddButton({
+    Name = "Cash-Aura",
+    Callback = function()
+            while wait() do
+                local function getMoneyAroundMe()
+                    wait()
+                    for _, money in ipairs(game.Workspace.Ignored.Drop:GetChildren()) do
+                        if money.Name == "MoneyDrop" and (money.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude < 20 then
+                            fireclickdetector(money.ClickDetector)
+                        end
+                    end
+                end
+                getMoneyAroundMe()
+            end
+            print("button pressed Work")
+    end    
+})
+
+local isDroppingMoney = false
+
+CombatTab:AddToggle({
+    Name = "Auto-Drop",
+    Default = false,
+    Callback = function(Value)
+        print(Value)
+        isDroppingMoney = Value
+
+        if isDroppingMoney then
+            while isDroppingMoney do
+                local args = {
+                    [1] = "DropMoney",
+                    [2] = "10000"
+                }
+                game:GetService("ReplicatedStorage").MainEvent:FireServer(unpack(args))
+                wait(0.5)
+            end
+        end
+    end    
+})
+
+--Camlocks Tab
+local Section = CamlocksTab:AddSection({
+    Name = "Camlocks"
+})
+
+CamlocksTab:AddButton({
+    Name = "Camlock(C)",
+    Callback = function()
+            local Players = game:GetService("Players")
+            local UserInputService = game:GetService("UserInputService")
+            local StarterGui = game:GetService("StarterGui")
+
+            local player = Players.LocalPlayer
+            local camera = workspace.CurrentCamera
+            local isLocked = false
+            local aimLockTarget = nil
+
+            local function sendNotification(message)
+                StarterGui:SetCore("SendNotification", {
+                    Title = "Notification";
+                    Text = message;
+                    Duration = 2;
+                })
+            end
+
+            local function getClosestPlayer()
+                local closestPlayer = nil
+                local shortestDistance = math.huge
+                for _, otherPlayer in pairs(Players:GetPlayers()) do
+                    if otherPlayer ~= player then
+                        local character = otherPlayer.Character
+                        if character and character:FindFirstChild("HumanoidRootPart") then
+                            local humanoidRootPart = character.HumanoidRootPart
+                            local screenPosition, onScreen = camera:WorldToScreenPoint(humanoidRootPart.Position)
+                            if onScreen then
+                                local distance = (Vector2.new(screenPosition.X, screenPosition.Y) - Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)).Magnitude
+                                if distance < shortestDistance then
+                                    shortestDistance = distance
+                                    closestPlayer = otherPlayer
+                                end
+                            end
+                        end
+                    end
+                end
+                return closestPlayer
+            end
+
+            local function toggleAimLock()
+                if isLocked then
+                    aimLockTarget = nil
+                    isLocked = false
+                    sendNotification("Camlock Unlocked")
+                else
+                    aimLockTarget = getClosestPlayer()
+                    isLocked = true
+                    sendNotification("Camlock Loaded")
+                end
+            end
+
+            UserInputService.InputBegan:Connect(function(input, gameProcessed)
+                if not gameProcessed and input.KeyCode == Enum.KeyCode.C then
+                    toggleAimLock()
+                end
+            end)
+
+            game:GetService("RunService").RenderStepped:Connect(function()
+                if isLocked and aimLockTarget and aimLockTarget.Character and aimLockTarget.Character:FindFirstChild("HumanoidRootPart") then
+                    local targetPosition = aimLockTarget.Character.HumanoidRootPart.Position
+                    camera.CFrame = CFrame.new(camera.CFrame.Position, targetPosition)
+                end
+            end)
+            print("button pressed")
+    end    
+})
+
+CamlocksTab:AddButton({
+    Name = "Sosa's Skidded Lock",
+    Callback = function()
+            local screenGui = Instance.new("ScreenGui")
+            screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+            local button = Instance.new("TextButton")
+            button.Parent = screenGui
+            button.Size = UDim2.new(0.2, 0, 0.2, 0)
+            button.Position = UDim2.new(0.4, 0, 0.4, 0)
+            button.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+            button.Text = "NameHere"
+            button.TextScaled = true
+            button.TextColor3 = Color3.fromRGB(255, 255, 255)
+            button.BorderSizePixel = 0
+
+            local buttonUICorner = Instance.new("UICorner")
+            buttonUICorner.CornerRadius = UDim.new(0, 20)
+            buttonUICorner.Parent = button
+
+            local isOn = false
+            local Players = game:GetService("Players")
+            local LocalPlayer = Players.LocalPlayer
+            local Camera = workspace.CurrentCamera
+            local UIS = game:GetService("UserInputService")
+            local RunService = game:GetService("RunService")
+            local predictionValue = 0.1488375834163075
+            local jumpOffset = 0.1
+            local camlockXOffset = 0.5
+            local camlockYOffset = 0.2
+            local isLocked = false
+            local TargetPlayer = nil
+            local RenderConnection = nil
+
+            local function findClosestPlayerToCamera()
+                local closestPlayer = nil
+                local closestDist = math.huge
+
+                for _, player in pairs(Players:GetPlayers()) do
+                    if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("UpperTorso") then
+                        local playerPos = player.Character.UpperTorso.Position
+                        local screenPos, onScreen = Camera:WorldToScreenPoint(playerPos)
+
+                        if onScreen then
+                            local mousePos = UIS:GetMouseLocation()
+                            local dist = (Vector2.new(mousePos.X, mousePos.Y) - Vector2.new(screenPos.X, screenPos.Y)).Magnitude
+
+                            if dist < closestDist then
+                                closestDist = dist
+                                closestPlayer = player
+                            end
+                        end
+                    end
+                end
+                return closestPlayer
+            end
+
+            local function lockOntoPlayer(player)
+                if player and player.Character and player.Character:FindFirstChild("UpperTorso") then
+                    local targetPart = player.Character.UpperTorso
+                    if RenderConnection then
+                        RenderConnection:Disconnect()
+                    end
+                    RenderConnection = RunService.RenderStepped:Connect(function()
+                        if isLocked and player.Character then
+                            local predictedPosition = targetPart.Position + targetPart.Velocity * predictionValue + Vector3.new(0, jumpOffset, 0)
+                            local cameraOffset = Vector3.new(camlockXOffset, camlockYOffset, 0)
+                            local goalCFrame = CFrame.new(Camera.CFrame.Position, predictedPosition + cameraOffset)
+                            Camera.CFrame = goalCFrame
+                        end
+                    end)
+                end
+            end
+
+            button.MouseButton1Click:Connect(function()
+                isOn = not isOn
+                if isOn then
+                    button.Text = "ON"
+                    isLocked = true
+                    TargetPlayer = findClosestPlayerToCamera()
+                    if TargetPlayer then
+                        lockOntoPlayer(TargetPlayer)
+                    end
+                else
+                    button.Text = "OFF"
+                    isLocked = false
+                    if RenderConnection then
+                        RenderConnection:Disconnect()
+                    end
+                end
+            end)
+
+            local dragging
+            local dragInput
+            local dragStart
+            local startPos
+
+            local function update(input)
+                local delta = input.Position - dragStart
+                button.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+            end
+
+            button.InputBegan:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                    dragging = true
+                    dragStart = input.Position
+                    startPos = button.Position
+
+                    input.Changed:Connect(function()
+                        if input.UserInputState == Enum.UserInputState.End then
+                            dragging = false
+                        end
+                    end)
+                end
+            end)
+
+            button.InputChanged:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+                    dragInput = input
+                end
+            end)
+
+            game:GetService("UserInputService").InputChanged:Connect(function(input)
+                if dragging and input == dragInput then
+                    update(input)
+                end
+            end)
+            print("button pressed")
+    end    
+})
+
+CamlocksTab:AddButton({
+    Name = "Ace Lock",
+    Callback = function()           loadstring(game:HttpGet("https://raw.githubusercontent.com/Totocoems/Ace/main/Ace"))()
+            print("button pressed")
+    end    
+})
+
+CamlocksTab:AddButton({
+    Name = "Kazio.lua Lock",
+    Callback = function()
+            local Players = game:GetService("Players")
+            local RunService = game:GetService("RunService")
+            local LocalPlayer = Players.LocalPlayer
+            local Camera = workspace.CurrentCamera
+            local UIS = game:GetService("UserInputService")
+            local Mouse = LocalPlayer:GetMouse()
+
+            local function createGUI()
+                local ScreenGui = Instance.new("ScreenGui")
+                local BarFrame = Instance.new("Frame")
+                local Button = Instance.new("TextButton")
+
+                ScreenGui.Name = "KazioGui"
+                ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+
+                BarFrame.Name = "MoveableBar"
+                BarFrame.Size = UDim2.new(0, 220, 0, 70)
+                BarFrame.Position = UDim2.new(1, -240, 0, 20)
+                BarFrame.BackgroundColor3 = Color3.new(0.2, 0.2, 0.2)
+                BarFrame.BorderSizePixel = 2
+                BarFrame.Parent = ScreenGui
+                BarFrame.Active = true
+
+                Button.Name = "Kazio.lol"
+                Button.Size = UDim2.new(0, 200, 0, 50)
+                Button.Position = UDim2.new(0, 10, 0, 10)
+                Button.Text = "Kazio Off"
+                Button.Parent = BarFrame
+
+                Button.Font = Enum.Font.LuckiestGuy
+                Button.TextSize = 30
+                Button.TextColor3 = Color3.new(1, 1, 1)
+                Button.TextStrokeTransparency = 0.5
+                Button.TextStrokeColor3 = Color3.new(0, 0, 0)
+
+                local function rainbowBackground(button)
+                    while true do
+                        for i = 0, 1, 0.01 do
+                            button.BackgroundColor3 = Color3.fromHSV(i, 1, 1)
+                            wait(0.01)
+                        end
+                    end
+                end
+
+                spawn(function()
+                    rainbowBackground(Button)
+                end)
+
+                local dragging = false
+                local dragInput, dragStart, startPos
+
+                local function updateDrag(input)
+                    local delta = input.Position - dragStart
+                    BarFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+                end
+
+                BarFrame.InputBegan:Connect(function(input)
+                    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                        dragging = true
+                        dragStart = input.Position
+                        startPos = BarFrame.Position
+
+                        input.Changed:Connect(function()
+                            if input.UserInputState == Enum.UserInputState.End then
+                                dragging = false
+                            end
+                        end)
+                    end
+                end)
+
+                BarFrame.InputChanged:Connect(function(input)
+                    if input.UserInputType == Enum.UserInputType.MouseMovement then
+                        dragInput = input
+                    end
+                end)
+
+                UIS.InputChanged:Connect(function(input)
+                    if input == dragInput and dragging then
+                        updateDrag(input)
+                    end
+                end)
+
+                local predictionValue = 0.1488375834163075
+                local jumpOffset = 0.1
+                local camlockXOffset = 0.5
+                local camlockYOffset = 0.2
+                local isLocked = false
+                local TargetPlayer = nil
+                local RenderConnection = nil
+
+                local function findClosestPlayerToCamera()
+                    local closestPlayer = nil
+                    local closestDist = math.huge
+
+                    for _, player in pairs(Players:GetPlayers()) do
+                        if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("UpperTorso") then
+                            local playerPos = player.Character.UpperTorso.Position
+                            local screenPos, onScreen = Camera:WorldToScreenPoint(playerPos)
+
+                            if onScreen then
+                                local mousePos = UIS:GetMouseLocation()
+                                local dist = (Vector2.new(mousePos.X, mousePos.Y) - Vector2.new(screenPos.X, screenPos.Y)).Magnitude
+
+                                if dist < closestDist then
+                                    closestDist = dist
+                                    closestPlayer = player
+                                end
+                            end
+                        end
+                    end
+                    return closestPlayer
+                end
+
+                local function lockOntoPlayer(player)
+                    if player and player.Character and player.Character:FindFirstChild("UpperTorso") then
+                        local targetPart = player.Character.UpperTorso
+                        if RenderConnection then
+                            RenderConnection:Disconnect()
+                        end
+                        RenderConnection = RunService.RenderStepped:Connect(function()
+                            if isLocked and player.Character then
+                                local predictedPosition = targetPart.Position + targetPart.Velocity * predictionValue + Vector3.new(0, jumpOffset, 0)
+                                local cameraOffset = Vector3.new(camlockXOffset, camlockYOffset, 0)
+                                local goalCFrame = CFrame.new(Camera.CFrame.Position, predictedPosition + cameraOffset)
+                                Camera.CFrame = goalCFrame
+                            end
+                        end)
+                    end
+                end
+
+                Button.MouseButton1Click:Connect(function()
+                    if isLocked then
+                        if RenderConnection then
+                            RenderConnection:Disconnect()
+                            RenderConnection = nil
+                        end
+                        Camera.CameraType = Enum.CameraType.Custom
+                        Button.Text = "Kazio Off"
+                        isLocked = false
+                    else
+                        isLocked = true
+                        TargetPlayer = findClosestPlayerToCamera()
+
+                        if TargetPlayer then
+                            lockOntoPlayer(TargetPlayer)
+                            Button.Text = "Kazio On"
+                        else
+                            Button.Text = "Kazio Off"
+                            isLocked = false
+                        end
+                    end
+                end)
+            end
+
+            createGUI()
+
+            LocalPlayer.CharacterAdded:Connect(function()
+                repeat wait() until LocalPlayer:FindFirstChild("PlayerGui")
+
+                local existingGui = LocalPlayer.PlayerGui:FindFirstChild("KazioGui")
+                if not existingGui then
+                    createGUI()
+                end
+            end)
+            print("button pressed")
+    end    
+})
+
+local Section = CamlocksTab:AddSection({
+    Name = "Visuals"
+})
+
+local espColor = Color3.fromRGB(255, 255, 255)
+local espEnabled = false
+
+local function setupESP(player)
+    if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
+        return
+    end
+
+    local highlight = player.Character:FindFirstChild("Highlight")
+
+    if not highlight then
+        highlight = Instance.new("Highlight")
+        highlight.Name = "Highlight"
+        highlight.Parent = player.Character
+    end
+
+    if espEnabled then
+        highlight.FillColor = espColor
+        highlight.OutlineColor = espColor
+    else
+        highlight.FillColor = Color3.fromRGB(0, 0, 0)
+        highlight.OutlineColor = Color3.fromRGB(0, 0, 0)
+    end
+end
+
+local function updateESP()
+    for _, player in ipairs(game:GetService("Players"):GetPlayers()) do
+        setupESP(player)
+    end
+end
+
+game:GetService("Players").PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function()
+        setupESP(player)
+    end)
+end)
+
+updateESP()
+
+CamlocksTab:AddToggle({
+    Name = "Player Visuals",
+    Default = false,
+    Callback = function(Value)
+        espEnabled = Value
+        updateESP()
+    end    
+})
+
+CamlocksTab:AddDropdown({
+    Name = "Visuals Color",
+    Default = "White",
+    Options = {"White", "Blue", "Red", "Cyan", "Purple", "Black"},
+    Callback = function(Value)
+        if Value == "White" then
+            espColor = Color3.fromRGB(255, 255, 255)
+        elseif Value == "Blue" then
+            espColor = Color3.fromRGB(0, 0, 255)
+        elseif Value == "Red" then
+            espColor = Color3.fromRGB(255, 0, 0)
+        elseif Value == "Cyan" then
+            espColor = Color3.fromRGB(0, 255, 255)
+        elseif Value == "Purple" then
+            espColor = Color3.fromRGB(128, 0, 128)
+        elseif Value == "Black" then
+            espColor = Color3.fromRGB(0, 0, 0)
+        end
+        updateESP()
+    end    
+})
+
+CamlocksTab:AddButton({
+    Name = "Nametags (Cant Turn Off)",
+    Callback = function()
+            local Players = game:GetService("Players")
+            local RunService = game:GetService("RunService")
+
+            local localPlayer = Players.LocalPlayer
+            local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+
+            local function createNameTag(player)
+                local billboardGui = Instance.new("BillboardGui")
+                billboardGui.Adornee = player.Character:WaitForChild("Head")
+                billboardGui.Size = UDim2.new(0, 100, 0, 25)
+                billboardGui.StudsOffset = Vector3.new(0, 2, 0)
+                billboardGui.AlwaysOnTop = true
+
+                local textLabel = Instance.new("TextLabel", billboardGui)
+                textLabel.Size = UDim2.new(1, 0, 1, 0)
+                textLabel.BackgroundTransparency = 1
+                textLabel.TextStrokeTransparency = 0.5
+                textLabel.Font = Enum.Font.LuckiestGuy
+                textLabel.TextColor3 = Color3.new(1, 1, 1)
+                textLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+                textLabel.TextSize = 14
+                textLabel.TextScaled = false
+
+                billboardGui.Parent = player.Character:WaitForChild("Head")
+
+                RunService.RenderStepped:Connect(function()
+                    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                        local distance = (character:WaitForChild("HumanoidRootPart").Position - player.Character.HumanoidRootPart.Position).Magnitude
+                        textLabel.Text = string.format("Username: %s | Studs: %d", player.Name, math.floor(distance))
+                    end
+                end)
+            end
+
+            for _, player in pairs(Players:GetPlayers()) do
+                if player ~= localPlayer then
+                    createNameTag(player)
+                end
+            end
+
+            Players.PlayerAdded:Connect(function(player)
+                player.CharacterAdded:Connect(function()
+                    if player ~= localPlayer then
+                        createNameTag(player)
+                    end
+                end)
+            end)
+            print("button pressed")
+    end    
+})
+
+--Aimlocks Tab
+local Section = OrbitTab:AddSection({
+    Name = "Orbit"
+})
+
+OrbitTab:AddButton({
+    Name = "Orbit Tool",
+    Callback = function()
+            local Players = game:GetService("Players")
+            local UserInputService = game:GetService("UserInputService")
+            local StarterGui = game:GetService("StarterGui")
+            local RunService = game:GetService("RunService")
+
+            local player = Players.LocalPlayer
+            local camera = workspace.CurrentCamera
+            local isLocked = false
+            local aimLockTarget = nil
+            local orbiting = false
+            local radius = 3
+            local orbitSpeed = 20
+            local offset = Vector3.new()
+            local angleOffset = 0
+            local toolActivated = false
+
+            local function sendNotification(message)
+                StarterGui:SetCore("SendNotification", {
+                    Title = "Notification";
+                    Text = message;
+                    Duration = 2;
+                })
+            end
+
+            local function getClosestPlayer()
+                local closestPlayer = nil
+                local shortestDistance = math.huge
+                for _, otherPlayer in pairs(Players:GetPlayers()) do
+                    if otherPlayer ~= player then
+                        local character = otherPlayer.Character
+                        if character and character:FindFirstChild("HumanoidRootPart") then
+                            local humanoidRootPart = character.HumanoidRootPart
+                            local screenPosition, onScreen = camera:WorldToScreenPoint(humanoidRootPart.Position)
+                            if onScreen then
+                                local distance = (Vector2.new(screenPosition.X, screenPosition.Y) - Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)).Magnitude
+                                if distance < shortestDistance then
+                                    shortestDistance = distance
+                                    closestPlayer = otherPlayer
+                                end
+                            end
+                        end
+                    end
+                end
+                return closestPlayer
+            end
+
+            local function startOrbiting(targetPlayer)
+                orbiting = true
+                sendNotification("Orbiting " .. targetPlayer.Name)
+
+                RunService.RenderStepped:Connect(function()
+                    if orbiting and targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                        angleOffset = (angleOffset + orbitSpeed * RunService.RenderStepped:Wait()) % (2 * math.pi)
+                        offset = Vector3.new(math.cos(angleOffset) * radius, 0, math.sin(angleOffset) * radius)
+                        local newPos = targetPlayer.Character.HumanoidRootPart.Position + offset
+
+                        player.Character.HumanoidRootPart.CFrame = CFrame.new(newPos, targetPlayer.Character.HumanoidRootPart.Position)
+                        camera.CFrame = CFrame.new(camera.CFrame.Position, targetPlayer.Character.HumanoidRootPart.Position)
+                    end
+                end)
+            end
+
+            local function stopOrbiting()
+                orbiting = false
+                sendNotification("Orbiting Stopped")
+            end
+
+            local function autoLockToTarget()
+                if orbiting and aimLockTarget and aimLockTarget.Character and aimLockTarget.Character:FindFirstChild("HumanoidRootPart") then
+                    local targetPosition = aimLockTarget.Character.HumanoidRootPart.Position
+                    camera.CFrame = CFrame.new(camera.CFrame.Position, targetPosition)
+                end
+            end
+
+            local tool = Instance.new("Tool")
+            tool.Name = "Demo’s Orbit Tool"
+            tool.RequiresHandle = false
+            tool.Parent = player.Backpack
+
+            tool.Activated:Connect(function()
+                if toolActivated then
+                    if orbiting then
+                        stopOrbiting()
+                        aimLockTarget = nil
+                    else
+                        aimLockTarget = getClosestPlayer()
+                        if aimLockTarget then
+                            startOrbiting(aimLockTarget)
+                        end
+                    end
+                    toolActivated = not toolActivated
+                else
+                    toolActivated = true
+                end
+            end)
+
+            RunService.RenderStepped:Connect(autoLockToTarget)
+            print("button pressed")
+    end    
+})
+
+OrbitTab:AddButton({
+    Name = "Silent Aim",
+    Callback = function()
+            if not Game:IsLoaded() then Game.Loaded:Wait() end --> DO NOT DELETE
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Pixeluted/adoniscries/main/Source.lua",true))() --> DO NOT DELETE
+
+            --> Silent Aim | Global Table <--
+            getgenv().Silent = {
+                Settings = {
+                    Toggled = true,
+                    AimPart = "HumanoidRootPart", --> HumanoidRootPart, UpperTorso, LowerTorso, Head <-- Main Parts
+                    HitChance = 1000, 
+
+                    Prediction = {
+                        Enabled = true,
+                        Horizontal = 0.13745, --> X, Z
+                        Vertical = 0.13745, --> Y
+                    },
+
+                    Circle = {
+                        Visible = true,
+                        Color = Color3.fromRGB(255, 255, 255),
+                        Transparency = 1,
+                        Thickness = 1.5,
+                        NumSides = 1000,
+                        Radius = 100, --> Change Circle Size Here
+                        Filled = false,
+                    },
+                },
+            }
+
+            -- Basic Silent-Aim [ DAHOOD GAMES ]
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/TheRealXORA/Roblox/Scripts/Basic%20Silent-Aim", true))()
+            print("button pressed")
+    end    
+})
+
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local toggleEnabled = false
+
+local function zeroOutYVelocity(hrp)
+    hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)
+    hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)
+end
+
+local function onPlayerAdded(player)
+    player.CharacterAdded:Connect(function(character)
+        local hrp = character:WaitForChild("HumanoidRootPart")
+        if toggleEnabled then
+            zeroOutYVelocity(hrp)
+        end
+    end)
+end
+
+local function onPlayerRemoving(player)
+    player.CharacterAdded:Disconnect()
+end
+
+Players.PlayerAdded:Connect(onPlayerAdded)
+Players.PlayerRemoving:Connect(onPlayerRemoving)
+
+RunService.Heartbeat:Connect(function()
+    if toggleEnabled then
+        pcall(function()
+            for _, player in pairs(Players:GetPlayers()) do
+                if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                    local hrp = player.Character.HumanoidRootPart
+                    zeroOutYVelocity(hrp)
+                end
+            end
+        end)
+    end
+end)
+
+OrbitTab:AddToggle({
+    Name = "Resolver",
+    Default = false,
+    Callback = function(Value)
+        toggleEnabled = Value
+        print("Toggle value:", Value)
+    end    
+})
+
+OrbitTab:AddLabel("Recommended With Automatic And Knifes.")
+
+--Teleports Tab
+local Section = TeleportsTab:AddSection({
+    Name = "Teleports"
+})
+
+TeleportsTab:AddButton({
+    Name = "Bank",
+    Callback = function()
+            local targetCFrame = CFrame.new(
+                -385.219788, 21.8949318, -284.751801, 
+                0.313138098, -9.40148297e-08, 0.949707627, 
+                -2.30528805e-08, 1, 1.06594456e-07, 
+                -0.949707627, -5.5272281e-08, 0.313138098
+            )
+
+            local player = game.Players.LocalPlayer
+            if player and player.Character then
+                player.Character:WaitForChild("HumanoidRootPart").CFrame = targetCFrame
+            end
+            print("button pressed")
+    end    
+})
+
+TeleportsTab:AddButton({
+    Name = "Secret Place",
+    Callback = function()
+            local targetCFrame = CFrame.new(
+                -265.120361, -6.20834494, -385.459686, 
+                -0.998489022, -7.31883887e-08, -0.0549517721, 
+                -6.76855336e-08, 1, -1.02000797e-07, 
+                0.0549517721, -9.81272379e-08, -0.998489022
+            )
+
+            local player = game.Players.LocalPlayer
+            if player and player.Character then
+                player.Character:WaitForChild("HumanoidRootPart").CFrame = targetCFrame
+            end
+            print("button pressed")
+    end    
+})
+
+TeleportsTab:AddButton({
+    Name = "Downhill Gunstore",
+    Callback = function()
+            local targetCFrame = CFrame.new(
+                -582.936279, 8.31477833, -736.169922, 
+                0.0126215015, -5.11788159e-08, -0.999920368, 
+                -1.06370557e-07, 1, -5.25255537e-08, 
+                0.999920368, 1.07025038e-07, 0.0126215015
+            )
+
+            local player = game.Players.LocalPlayer
+            if player and player.Character then
+                player.Character:WaitForChild("HumanoidRootPart").CFrame = targetCFrame
+            end
+            print("button pressed")
+    end    
+})
+
+TeleportsTab:AddButton({
+    Name = "Uptown Gunstore",
+    Callback = function()
+            local targetCFrame = CFrame.new(
+                481.623688, 48.0704918, -623.217773, 
+                -0.999951303, -4.59173108e-08, -0.00986959785, 
+                -4.56094398e-08, 1, -3.14187147e-08, 
+                0.00986959785, -3.09670369e-08, -0.999951303
+            )
+
+            local player = game.Players.LocalPlayer
+            if player and player.Character then
+                player.Character:WaitForChild("HumanoidRootPart").CFrame = targetCFrame
+            end
+            print("button pressed")
+    end    
+})
+
+TeleportsTab:AddButton({
+    Name = "Military",
+    Callback = function()
+            local targetCFrame = CFrame.new(
+                34.5541534, 25.630003, -836.179626, 
+                -0.996940374, 1.05606368e-07, -0.0781656727, 
+                1.03106039e-07, 1, 3.60234189e-08, 
+                0.0781656727, 2.7853849e-08, -0.996940374
+            )
+
+            local player = game.Players.LocalPlayer
+            if player and player.Character then
+                player.Character:WaitForChild("HumanoidRootPart").CFrame = targetCFrame
+            end
+            print("button pressed")
+    end    
+})
+
+TeleportsTab:AddButton({
+    Name = "Da Casino",
+    Callback = function()
+            local targetCFrame = CFrame.new(
+                -904.611206, 21.2549915, -179.923523, 
+                -0.999870539, 1.67254903e-08, 0.0160904191, 
+                1.49742085e-08, 1, -1.08960514e-07, 
+                -0.0160904191, -1.08705471e-07, -0.999870539
+            )
+
+            local player = game.Players.LocalPlayer
+            if player and player.Character then
+                player.Character:WaitForChild("HumanoidRootPart").CFrame = targetCFrame
+            end
+            print("button pressed")
+    end    
+})
+
+TeleportsTab:AddButton({
+    Name = "UFO",
+    Callback = function()
+            local targetCFrame = CFrame.new(
+                70.9996567, 156.49881, -688.755127, 
+                0.997784436, -5.26104404e-09, 0.0665296987, 
+                1.10492293e-09, 1, 6.25069632e-08, 
+                -0.0665296987, -6.22949585e-08, 0.997784436
+            )
+
+            local player = game.Players.LocalPlayer
+            if player and player.Character then
+                player.Character:WaitForChild("HumanoidRootPart").CFrame = targetCFrame
+            end
+            print("button pressed")
+    end    
+})
+
+--Auto-Farm Tab
+local Section = AutoFarmTab:AddSection({
+    Name = "Auto-Farm"
+})
+
+AutoFarmTab:AddLabel("Demomode Auto Farm Coming Soon.")
+
+AutoFarmTab:AddButton({
+    Name = "Auto-Farm GUI",
+    Callback = function()
+            _G.ToolMode = '1' -- '1' for Combat | '2' for Knife
+            _G.FpsCap = 85 -- fpscap For your Account
+            _G.LowGfx = true -- true for LowGfx on | false for LowGfx off
+            _G.ToggleKey = 'v' -- Toggle Key to hide Gui
+
+            _G.Webhook = {
+                ['Url'] = 'YOUR WEBHOOK HERE!', -- Put Your Webhook Here or leave blank to not use Webhooks
+                ['Time'] = 900, -- Sends Webhook Every 15 minutes
+            }
+
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/justxsmart8/NavHub/main/NavHub.lua"))()
+            print("button pressed")
+    end    
+})
+
+AutoFarmTab:AddButton({
+    Name = "Free Key: (FUCK KEY SYSTEMS)",
+    Callback = function()
+            local textToCopy = "AD817ZC"
+            setclipboard(tostring(textToCopy))
+            print("button pressed")
+    end    
+})
+
+--Quick Buy Tab
+local Section = OtherTab:AddSection({
+    Name = "Others"
+})
+
+OtherTab:AddButton({
+    Name = "Zombie Animation",
+    Callback = function()
+            game:GetService("RunService").Stepped:Connect(function ()
+            game.Players.LocalPlayer.Character.Animate.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=10921344533"
+            game.Players.LocalPlayer.Character.Animate.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=10921345304"
+            game.Players.LocalPlayer.Character.Animate.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=616163682"
+            game.Players.LocalPlayer.Character.Animate.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=10921351278"
+            game.Players.LocalPlayer.Character.Animate.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=10921350320"
+            game.Players.LocalPlayer.Character.Animate.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=10921343576"
+            end)
+            print("button pressed")
+    end    
+})
+
+OtherTab:AddButton({
+    Name = "Headless & Korblox",
+    Callback = function()
+            local function onCharacterAdded(character)
+                wait(1) -- Wait for the character to fully load
+
+                local head = character:FindFirstChild("Head")
+                if head then
+                    head.MeshId = "http://www.roblox.com/asset/?id=6686307858"
+                    head.TextureID = "http://www.roblox.com/asset/?id=6686307858"
+                    head.Transparency = 1
+                end
+
+                local rightLowerLeg = character:FindFirstChild("RightLowerLeg")
+                if rightLowerLeg then
+                    rightLowerLeg.MeshId = "http://www.roblox.com/asset/?id=902942093"
+                    rightLowerLeg.Transparency = 1
+                end
+
+                local rightUpperLeg = character:FindFirstChild("RightUpperLeg")
+                if rightUpperLeg then
+                    rightUpperLeg.MeshId = "http://www.roblox.com/asset/?id=902942096"
+                    rightUpperLeg.TextureID = "http://www.roblox.com/asset/?id=902843398"
+                end
+
+                local rightFoot = character:FindFirstChild("RightFoot")
+                if rightFoot then
+                    rightFoot.MeshId = "http://www.roblox.com/asset/?id=902942089"
+                    rightFoot.Transparency = 1
+                end
+            end
+
+            game.Players.LocalPlayer.CharacterAdded:Connect(onCharacterAdded)
+
+            -- In case the character is already spawned when the script runs
+            if game.Players.LocalPlayer.Character then
+                onCharacterAdded(game.Players.LocalPlayer.Character)
+            end
+            print("button pressed")
+    end    
+})
+
+OtherTab:AddButton({
+    Name = "Right Click",
+    Callback = function()          loadstring(game:HttpGet("https://raw.githubusercontent.com/DHBCommunity/DHBOfficialScript/main/RightClick"))()
+            print("button pressed")
+    end    
+})
+
+OtherTab:AddButton({
+    Name = "Cashood Da Hood",
+    Callback = function()           loadstring(game:HttpGet("https://raw.githubusercontent.com/josheeb0/casahood/main/maingui-obfuscated.lua"))()
+            print("button pressed")
+    end    
+})
+
+OtherTab:AddButton({
+    Name = "Right Click",
+    Callback = function()           loadstring(game:HttpGet("https://raw.githubusercontent.com/DHBCommunity/DHBOfficialScript/main/RightClick"))()
+            print("button pressed")
+    end    
+})
